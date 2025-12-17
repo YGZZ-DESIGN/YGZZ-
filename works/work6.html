@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简住宅设计 | 设计师作品集</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap');
+        
+        :root {
+            --primary-color: #000;
+            --secondary-color: #333;
+            --background-color: #fff;
+            --accent-color: #0066ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            overflow-x: hidden;
+        }
+        
+        /* 作品详情容器 */
+        .work-detail-container {
+            padding: 8rem 4rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .work-detail-header {
+            margin-bottom: 6rem;
+        }
+        
+        .work-detail-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 200;
+            margin-bottom: 1rem;
+        }
+        
+        .work-detail-meta {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--secondary-color);
+        }
+        
+        .work-detail-description {
+            font-size: 1.1rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--secondary-color);
+            max-width: 800px;
+            margin-bottom: 4rem;
+        }
+        
+        .work-detail-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 4rem;
+            object-fit: cover;
+        }
+        
+        .work-detail-images-container {
+            margin-bottom: 4rem;
+        }
+        
+
+        
+        /* 项目翻页导航样式 */
+        .work-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--secondary-color);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .work-navigation:hover {
+            opacity: 1;
+        }
+        
+        .work-nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 300;
+            transition: all 0.3s ease;
+        }
+        
+        .work-nav-btn:hover {
+            color: var(--accent-color);
+        }
+        
+        .work-nav-btn:hover .nav-arrow {
+            transform: scale(1.2);
+        }
+        
+        .prev-btn {
+            justify-content: flex-start;
+        }
+        
+        .next-btn {
+            justify-content: flex-end;
+        }
+        
+        .nav-arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .work-detail-container {
+                padding: 6rem 2rem 2rem;
+            }
+            
+            .work-detail-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .work-navigation {
+                margin-top: 4rem;
+                padding: 1rem 0;
+            }
+            
+            .work-nav-btn {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="../index.html#hero" data-hover="首页">HOME</a></li>
+            <li><a href="../index.html#works" data-hover="作品">WORKS</a></li>
+            <li><a href="../index.html#about" data-hover="关于">ABOUT</a></li>
+            <li><a href="../index.html#process" data-hover="设计流程">PROCESS</a></li>
+            <li><a href="../index.html#contact" data-hover="联系">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <!-- 作品详情内容 -->
+    <div class="work-detail-container">
+        <div class="work-detail-header">
+            <h1 class="work-detail-title"></h1>
+            <div class="work-detail-meta">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p class="work-detail-description"></p>
+        </div>
+        
+        <div class="work-detail-images-container"></div>
+        
+        <!-- 项目翻页导航 -->
+        <div class="work-navigation">
+            <a href="#" id="prev-work" class="work-nav-btn prev-btn">
+                <span class="nav-arrow">←</span>
+                <span class="nav-text">上一个项目</span>
+            </a>
+            <a href="#" id="next-work" class="work-nav-btn next-btn">
+                <span class="nav-text">下一个项目</span>
+                <span class="nav-arrow">→</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            © 2024 予共筑造. All rights reserved.
+        </div>
+    </footer>
+    
+    <script>
+        // 从localStorage加载作品详情数据
+        function loadWorkDetailFromStorage() {
+            try {
+                // 获取当前页面的作品索引
+                const currentPage = window.location.pathname;
+                const workIndex = parseInt(currentPage.match(/work(\d+)\.html/)[1]) - 1;
+                
+                // 从localStorage获取所有作品数据
+                const works = JSON.parse(localStorage.getItem('works'));
+                
+                if (works && works[workIndex]) {
+                    const work = works[workIndex];
+                    
+                    // 更新作品标题
+                    const titleElement = document.querySelector('.work-detail-title');
+                    if (titleElement) titleElement.textContent = work.title;
+                    
+                    // 更新作品元数据
+                    const metaElements = document.querySelectorAll('.work-detail-meta span');
+                    if (metaElements.length > 0 && work.category) metaElements[0].textContent = work.category;
+                    if (metaElements.length > 1 && work.year) metaElements[1].textContent = work.year;
+                    if (metaElements.length > 2 && work.location) metaElements[2].textContent = work.location;
+                    
+                    // 更新作品描述
+                    const descElement = document.querySelector('.work-detail-description');
+                    if (descElement) descElement.textContent = work.description;
+                    
+                    // 更新作品图片
+                    const imagesContainer = document.querySelector('.work-detail-images-container');
+                    imagesContainer.innerHTML = '';
+                    if (work.images && work.images.length > 0) {
+                        work.images.forEach(imageUrl => {
+                            const img = document.createElement('img');
+                            img.src = imageUrl;
+                            img.alt = work.title;
+                            img.classList.add('work-detail-image');
+                            imagesContainer.appendChild(img);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('加载作品详情失败:', error);
+            }
+        }
+        
+        // 页面加载时执行
+        window.addEventListener('DOMContentLoaded', () => {
+            loadWorkDetailFromStorage();
+            setupWorkNavigation();
+        });
+
+        // 设置作品导航（上一个/下一个）
+        function setupWorkNavigation() {
+            const currentPage = window.location.pathname;
+            const currentIndex = parseInt(currentPage.match(/work(\d+)\.html/)[1]);
+            
+            const prevBtn = document.getElementById('prev-work');
+            const nextBtn = document.getElementById('next-work');
+            
+            // 设置上一个作品链接
+            if (prevBtn) {
+                if (currentIndex > 1) {
+                    prevBtn.href = `work${currentIndex - 1}.html`;
+                } else {
+                    prevBtn.style.opacity = '0.3';
+                    prevBtn.style.pointerEvents = 'none';
+                }
+            }
+            
+            // 设置下一个作品链接
+            if (nextBtn) {
+                if (currentIndex < 6) {
+                    nextBtn.href = `work${currentIndex + 1}.html`;
+                } else {
+                    nextBtn.style.opacity = '0.3';
+                    nextBtn.style.pointerEvents = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
